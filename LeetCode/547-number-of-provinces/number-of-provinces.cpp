@@ -4,71 +4,47 @@ using namespace std;
 class Solution {
 public:
 
-void runAround(int nodeX , vector<vector<int>>& mat , vector<int>& gone , int nVal){
+    int findCircleNum(vector<vector<int>>& cityMatrix) {
 
-gone[nodeX]=1;
+        int n = cityMatrix.size();
 
-int walk=0;
-while(walk<nVal){
+        vector<int> seenState(n, 0);
 
-if(mat[nodeX][walk]==1){
+        int groupTotal = 0;
 
-if(gone[walk]==0){
+        for (int start = 0; start < n; start++) {
 
-int tempHold=walk;
-runAround(tempHold , mat , gone , nVal);
+            if (seenState[start] == 1) {
+                continue;
+            }
 
-}
-else{
-int skip=0;
-skip++;
-}
+            vector<int> helperQueue;
+            helperQueue.push_back(start);
 
-}
-else{
-int useless=5;
-useless=useless+1;
-}
+            int moveIndex = 0;
 
-walk++;
-}
+            while (moveIndex < helperQueue.size()) {
 
-}
+                int currentCity = helperQueue[moveIndex];
+                moveIndex++;
 
-int findCircleNum(vector<vector<int>>& adj){
+                if (seenState[currentCity] == 1) {
+                    continue;
+                }
 
-int totalN = adj.size();
+                seenState[currentCity] = 1;
 
-vector<int> visitedList;
-int fill=0;
-while(fill<totalN){
-visitedList.push_back(0);
-fill++;
-}
+                for (int check = 0; check < n; check++) {
 
-int countAns=0;
+                    if (cityMatrix[currentCity][check] == 1 && seenState[check] == 0) {
+                        helperQueue.push_back(check);
+                    }
+                }
+            }
 
-int i=0;
-for(i=0;i<totalN;i++){
+            groupTotal++;
+        }
 
-if(visitedList[i]==0){
-
-int startAgain=i;
-
-runAround(startAgain , adj , visitedList , totalN);
-
-countAns = countAns + 1;
-
-}
-else{
-int noUse=1;
-noUse=noUse+2;
-}
-
-}
-
-return countAns;
-
-}
-
+        return groupTotal;
+    }
 };
